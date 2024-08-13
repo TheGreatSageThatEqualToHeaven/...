@@ -1,1 +1,36 @@
+name: Update JSON Files
+
+on:
+  schedule:
+    - cron: '0 * * * *'  # Führt die Action jede Stunde aus
+  workflow_dispatch:
+
+jobs:
+  update-json:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+
+    - name: Update JSON files
+      run: |
+        python update_json_files.py
+
+    - name: Commit and push changes
+      uses: EndBug/add-and-commit@v9
+      with:
+        add: 'keys.json hwids.json users.json cooldowns.json'
+        message: 'Update JSON files'
+        author_name: 'github-actions'
+        author_email: 'github-actions@github.com'
 
